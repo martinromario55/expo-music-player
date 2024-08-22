@@ -1,11 +1,30 @@
+import library from '@/assets/data/library.json'
+import TracksList from '@/components/TracksList'
+import { screenPadding } from '@/constants/tokens'
+import { trackTitleFilter } from '@/helpers/filter'
+import { useNavigationSearch } from '@/hooks/useNavigationSearch'
 import { defaultStyles } from '@/styles'
-import React from 'react'
-import { Text, View } from 'react-native'
+import React, { useMemo } from 'react'
+import { View } from 'react-native'
 
 const SongScreen = () => {
+	const search = useNavigationSearch({
+		searchBarOptions: {
+			placeholder: 'Find in songs',
+		},
+	})
+
+	const filteredTracks = useMemo(() => {
+		if (!search) return library
+
+		return library.filter(trackTitleFilter(search))
+	}, [search])
+
 	return (
 		<View style={defaultStyles.container}>
-			<Text style={defaultStyles.text}>Song Screen</Text>
+			<View style={{ paddingHorizontal: screenPadding.horizontal }}>
+				<TracksList tracks={filteredTracks} scrollEnabled={false} />
+			</View>
 		</View>
 	)
 }
