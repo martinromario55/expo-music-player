@@ -1,20 +1,18 @@
 import { unknownTrackImageUri } from '@/constants/images'
 import { colors, fontSize } from '@/constants/tokens'
 import { defaultStyles } from '@/styles'
+import { Entypo } from '@expo/vector-icons'
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableHighlight, View } from 'react-native'
+import { Track, useActiveTrack } from 'react-native-track-player'
 // import FastImage from 'react-native-fast-image'
 
 export type TrackListItemProps = {
-	track: {
-		title: string
-		image?: string
-		artist?: string
-	}
+	track: Track
 }
 
 const TrackListItem = ({ track }: TrackListItemProps) => {
-	const isActiveTrack = false
+	const isActiveTrack = useActiveTrack()?.url === track.url
 
 	return (
 		<TouchableHighlight>
@@ -30,14 +28,14 @@ const TrackListItem = ({ track }: TrackListItemProps) => {
 
 					<Image
 						source={{
-							uri: track.image ?? unknownTrackImageUri,
+							uri: track.artwork ?? unknownTrackImageUri,
 						}}
 						style={{ ...styles.trackArtworkImage, opacity: isActiveTrack ? 0.6 : 1 }}
 					/>
 				</View>
 
-				{/* Track title + artist */}
 				<View>
+					{/* Track title + artist */}
 					<View style={{ width: '100%' }}>
 						<Text
 							numberOfLines={2}
@@ -55,6 +53,7 @@ const TrackListItem = ({ track }: TrackListItemProps) => {
 							</Text>
 						)}
 					</View>
+					<Entypo name="dots-three-horizontal" size={18} color={colors.icon} />
 				</View>
 			</View>
 		</TouchableHighlight>
